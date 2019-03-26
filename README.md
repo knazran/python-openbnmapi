@@ -11,10 +11,6 @@ Currently supports the following endpoints:
 - Interbank Swap
 - Interest Rate
 - Interest Volume
-
-### To - Do
-
-Implement the following endpoints
 - Islamic Interbank Rate
 - Kijang Emas
 - Overnight Policy Rate (OPR)
@@ -22,6 +18,7 @@ Implement the following endpoints
 - USD/MYR Interbank Intraday Rate
 - Kuala Lumpur USD/MYR Reference Rate
 
+### To - Do
 Implement 
 - support for date, year, month argument for relevant endpoints
 - More proper error handling

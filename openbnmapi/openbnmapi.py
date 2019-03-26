@@ -259,11 +259,11 @@ class OpenBNMAPI:
         month: int
             Month in numeric format. [1...12]
 
-    Reference: https://api.bnm.gov.my/portal#tag/Interest-Rate
+    Reference: https://api.bnm.gov.my/portal#tag/Interest-Volume
     """
     def interest_volume(self, product="money_market_operations", date=None, year=None, month=None, rtype = 'json'):
         # Form the request url
-        req_url = "{}{}".format(self.base_url, '/interest-volumei')
+        req_url = "{}{}".format(self.base_url, '/interest-volume')
         
         # Append additional arguments to the url if present
         """
@@ -274,3 +274,175 @@ class OpenBNMAPI:
         res = self._send_get_request(req_url, {"product":product})
         
         return self._return_response(res, rtype)
+
+    """
+    Get Islamic Interbank Rate
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/Islamic-Interbank-Rate
+    """
+    def islamic_interback_rate(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/islamic-interbank-rate')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+
+    """
+    Get Kijang Emas
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/Kijang-Emas
+    """
+    def kijang_emas(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/kijang-emas')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+
+    """
+    Get Overnight Policy Rate (OPR)
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/Overnight-Policy-Rate-(OPR)
+    """
+    def overnight_policy_rate(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/opr')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+    
+    """
+    Get Renminbi Deposit Acceptance Rate
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/Renminbi
+    """
+    def renminbi_deposit_acceptance_rate(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/renminbi-deposit-acceptance-rate')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+    
+    """
+    Get USD Interbank Intraday Rate
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/USDMYR-Interbank-Intraday-Rate
+    """
+    def usd_interbank_intraday_rate(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/usd-interbank-intraday-rate')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+
+    """
+    Get KL USD Reference Rate
+
+    Optional Parameters:
+        
+        date : string<date>
+            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
+        year: int
+            Year in format 'YYYYY'. Must be after year 2000
+        month: int
+            Month in numeric format. [1...12]
+
+    Reference: https://api.bnm.gov.my/portal#tag/Kuala-Lumpur-USDMYR-Reference-Rate
+    """
+    def kl_usd_reference_rate(self, date=None, year=None, month=None, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/kl-usd-reference-rate')
+        
+        # Append additional arguments to the url if present
+        """
+        - By Date (/date/{date})
+        - By Month and Year (/year/{year}/month/{month})
+        """
+        
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+    
+    
+
+    

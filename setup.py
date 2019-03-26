@@ -1,7 +1,7 @@
 from setuptools import setup
 
 def readme():
-    with open('README.m') as f:
+    with open('README.md') as f:
         return f.read()
 
 setup(name='openbnmapi',
@@ -14,7 +14,6 @@ setup(name='openbnmapi',
       license='MIT',
       packages=['openbnmapi'],
       install_requires=[
-          'json',
           'pandas',
           'requests'
       ],
