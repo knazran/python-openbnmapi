@@ -2,7 +2,7 @@ import json
 import requests
 import pandas as pd
 
-class OpenBNMAPy:
+class OpenBNMAPI:
     
     """
     Initialise the OpenBNMAPy class.
@@ -263,7 +263,7 @@ class OpenBNMAPy:
     """
     def interest_volume(self, product="money_market_operations", date=None, year=None, month=None, rtype = 'json'):
         # Form the request url
-        req_url = "{}{}".format(self.base_url, '/interest-volume')
+        req_url = "{}{}".format(self.base_url, '/interest-volumei')
         
         # Append additional arguments to the url if present
         """
