@@ -1,6 +1,7 @@
 import json
 import requests
 import pandas as pd
+from datetime import datetime, date
 
 class OpenBNMAPI:
     
@@ -26,13 +27,15 @@ class OpenBNMAPI:
                             'HLIBMYKL', 'HMABMYKL', 'KFHOMYKL', 'MBISMYKL', 'AFBQMYKL', 'OABBMYKL', 
                             'PUIBMYKL', 'RHBAMYKL', 'SCSRMYKK', 'AGOBMYKL', 'BSNAMYK1', 'PHBMMYKL', 
                             'MFBBMYKL', 'ARBKMYKL', 'BKCHMYKL', 'RJHIMYKL', 'BKRMMYKL']
+        
+        self.interest_related_products = ["money_market_operations", "interbank", "overall"]
+        self.exchange_rate_snapshots = ["0900" "1130" "1200" "1700"]
 
     """
     Helper function to send requests. Handles error codes and exceptions too.
     """ 
     def _send_get_request(self, req_url, params={}): 
         # Send request       
-        print(params)
         r = requests.get(req_url, headers=self.headers, params=params)
         
         # Handle Response
@@ -55,11 +58,47 @@ class OpenBNMAPI:
             return
     
     """
-    Helper function to validate date formats
+    Helper function to process date, year, month as additional parameters. 
+    This is due to the fact that these arguments are to be processed as url path parameters
+
+    returns: a valid url path parameter. eg: /date/{date} or /year/{year}/month/{month}
+    rtype: string
+
     """
-    def _validate_date(self, date, dformat="YYYY/MM/DD"):
+    def _parse_date_args(self, date, year, month):
+        # Check is both date and year,month is being filled up. Either one of them can be inputed
+        if (date) and (year and month):
+            raise ValueError("Either 'date' or 'year, month' is accepted as arguments")
+        
+        if date:
+            try:
+                parsed_date = datetime.strptime(date, '%Y-%m-%d')
+                print(parsed_date)
+
+                # Only accept date arguments after year 2000 
+                if (parsed_date.year > 2000) and (1 <= parsed_date.month <= 12):
+                    # Craft return url
+                    return_url = "/date/{}".format(date)
+                    return return_url
+                else:
+                    raise ValueError('Year out of range. Please ensure year is more recent than 2000')
+     
+            except ValueError:
+                raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+        
+        # Check is year and month exists and is of type int
+        if (year and month) and (type(year) == int) and (type(month) == int):
+            if (year > 2000) and (1 <= month <= 12): # Needs a more elegant check
+                # Craft return url
+                return_url = "/year/{}/month/{}".format(year,month)
+                return return_url
+            else:
+                raise ValueError("Incorrect year and month format. \
+                                  Ensure year is more recent than 2000 and month is in range of [1...12]")
+        
+        # Default case. Return nothing
         return
-    
+
     """
     Get Base Rates / BLR
 
@@ -110,6 +149,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -147,6 +189,12 @@ class OpenBNMAPI:
         # Form the request url
         req_url = "{}{}".format(self.base_url, '/exchange-rate')
         
+        # Validation args
+        if not quote['session'] in self.exchange_rate_snapshots:
+            raise ValueError("Invalid exchange rate snapshots. Valid snapshots are: '0900', '1130', '1200', '1700'")
+        if not quote['quote'] in ["rm", "fx"]:
+            raise ValueError("Invalid quote. Valid quotes are: 'rm' and 'fx'")
+
         # Append additional arguments to the url if present
         """
         - Latest
@@ -154,6 +202,19 @@ class OpenBNMAPI:
         - By Currency and Date
         - By Currency and Month and Year
         """
+        if currency_code:
+            # TO-DO further input validation for currency code as per ISO 4217
+            if not (len(currency_code) == 3): # Naive validation
+                raise ValueError("Invalid Currency Code. Please ensure currency is as per ISO 4217 format")
+            
+            # Append Currency args first
+            currency_args = "/{}".format(currency_code)
+            req_url = req_url + currency_args
+
+            # Then append date-related args, if present
+            args = self._parse_date_args(date, year, month)
+            if args:
+                req_url = req_url + args
         
         res = self._send_get_request(req_url, quote)
         
@@ -204,6 +265,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -237,7 +301,14 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
+        # Handle the args params
+        if not product in self.interest_related_products:
+            raise ValueError("Invalid product type")
+
         res = self._send_get_request(req_url, {"product":product})
         
         return self._return_response(res, rtype)
@@ -270,7 +341,14 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
+        # Handle the args params
+        if not product in self.interest_related_products:
+            raise ValueError("Invalid product type")
+
         res = self._send_get_request(req_url, {"product":product})
         
         return self._return_response(res, rtype)
@@ -298,6 +376,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -326,6 +407,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -336,24 +420,23 @@ class OpenBNMAPI:
 
     Optional Parameters:
         
-        date : string<date>
-            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
         year: int
             Year in format 'YYYYY'. Must be after year 2000
-        month: int
-            Month in numeric format. [1...12]
 
     Reference: https://api.bnm.gov.my/portal#tag/Overnight-Policy-Rate-(OPR)
     """
-    def overnight_policy_rate(self, date=None, year=None, month=None, rtype = 'json'):
+    def overnight_policy_rate(self, year=None, rtype = 'json'):
         # Form the request url
         req_url = "{}{}".format(self.base_url, '/opr')
         
         # Append additional arguments to the url if present
         """
-        - By Date (/date/{date})
-        - By Month and Year (/year/{year}/month/{month})
+        - By Year (/year/{year})
         """
+        if year:
+            if year > 2000:
+                args = "/year/{}".format(year)
+                req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -362,26 +445,24 @@ class OpenBNMAPI:
     """
     Get Renminbi Deposit Acceptance Rate
 
-    Optional Parameters:
-        
-        date : string<date>
-            Date with format as defined by RFC 3339, section 5.6 (YYYY-MM-DD)
-        year: int
-            Year in format 'YYYYY'. Must be after year 2000
-        month: int
-            Month in numeric format. [1...12]
-
     Reference: https://api.bnm.gov.my/portal#tag/Renminbi
     """
-    def renminbi_deposit_acceptance_rate(self, date=None, year=None, month=None, rtype = 'json'):
+    def renminbi_deposit_acceptance_rate(self, rtype = 'json'):
         # Form the request url
         req_url = "{}{}".format(self.base_url, '/renminbi-deposit-acceptance-rate')
         
-        # Append additional arguments to the url if present
-        """
-        - By Date (/date/{date})
-        - By Month and Year (/year/{year}/month/{month})
-        """
+        res = self._send_get_request(req_url)
+        
+        return self._return_response(res, rtype)
+    
+    """
+    Get Renminbi Deposit Acceptance Rate
+
+    Reference: https://api.bnm.gov.my/portal#tag/Renminbi
+    """
+    def renminbi_fx_forward_price(self, rtype = 'json'):
+        # Form the request url
+        req_url = "{}{}".format(self.base_url, '/renminbi-fx-forward-price')
         
         res = self._send_get_request(req_url)
         
@@ -410,6 +491,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
@@ -438,6 +522,9 @@ class OpenBNMAPI:
         - By Date (/date/{date})
         - By Month and Year (/year/{year}/month/{month})
         """
+        args = self._parse_date_args(date, year, month)
+        if args:
+            req_url = req_url + args
         
         res = self._send_get_request(req_url)
         
