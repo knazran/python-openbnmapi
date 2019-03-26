@@ -81,10 +81,10 @@ class OpenBNMAPI:
                     return_url = "/date/{}".format(date)
                     return return_url
                 else:
-                    raise ValueError('Year out of range. Please ensure year is more recent than 2000')
+                    yield ValueError('Year out of range. Please ensure year is more recent than 2000')
      
             except ValueError:
-                raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+                raise ValueError("Incorrect date format, should be YYYY-MM-DD")
         
         # Check is year and month exists and is of type int
         if (year and month) and (type(year) == int) and (type(month) == int):
