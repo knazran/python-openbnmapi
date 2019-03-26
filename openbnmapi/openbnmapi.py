@@ -201,9 +201,14 @@ class OpenBNMAPI:
         - By Currency and Month and Year
         """
         if currency_code:
-            # TO-DO further input validation for currency code as per ISO 4217
-            if not (len(currency_code) == 3): # Naive validation
-                raise ValueError("Invalid Currency Code. Please ensure currency is as per ISO 4217 format")
+            currency_code_error =   ("Invalid Currency Code.\n"
+                                    "Please ensure your currency is in ISO 4217 standard format.\n"
+                                    "Read more here: https://www.iso.org/iso-4217-currency-codes.html")
+            
+            if not (len(currency_code) == 3) or \
+                currency_code not in constants.currency_codes:
+                raise ValueError(currency_code_error)
+
             
             # Append Currency args first
             currency_args = "/{}".format(currency_code)
