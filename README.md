@@ -10,9 +10,21 @@ Currently supports the following endpoints:
 - Interbank Swap
 - Interest Rate
 - Interest Volume
+
+### To - Do
+
+Implement the following endpoints
 - Islamic Interbank Rate
 - Kijang Emas
 - Overnight Policy Rate (OPR)
 - Renminbi
 - USD/MYR Interbank Intraday Rate
 - Kuala Lumpur USD/MYR Reference Rate
+
+Implement 
+- support for date, year, month argument for relevant endpoints
+- More proper error handling
+- More robust input validation (Is this a valid bank code, currency code etc)
+- Cache mechanism 
+- Pandas dataframe support
+
