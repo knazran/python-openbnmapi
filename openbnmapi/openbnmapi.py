@@ -1,7 +1,11 @@
 import json
 import requests
 import pandas as pd
+
 from datetime import datetime, date
+
+# Local modules
+import constants
 
 class OpenBNMAPI:
     
@@ -16,20 +20,14 @@ class OpenBNMAPI:
 
     """
     def __init__(self, default_rtype = 'json'):
-        self.base_url = "https://api.bnm.gov.my/public"
-        self.headers = {"Accept" : "application/vnd.BNM.API.v1+json"}
+        self.base_url = constants.base_url
+        self.headers = constants.headers
         self.default_rtype = default_rtype
         
-        # TO DO: Move to 'constants' file
-        self.bank_codes = ['BKKBMYKL', 'CIBBMYKL', 'CITIMYKL', 'HLBBMYKL', 'HBMBMYKL', 'ICBKMYKL', 
-                            'MBBEMYKL', 'OCBCMYKL', 'PBBEMYKL', 'RHBBMYKL', 'SCBLMYKX', 'UOVBMYKL', 
-                            'AIBBMYKL', 'ALSRMYKL', 'AISLMYKL', 'BIMBMYKL', 'BMMBMYKL', 'CTBBMYKL', 
-                            'HLIBMYKL', 'HMABMYKL', 'KFHOMYKL', 'MBISMYKL', 'AFBQMYKL', 'OABBMYKL', 
-                            'PUIBMYKL', 'RHBAMYKL', 'SCSRMYKK', 'AGOBMYKL', 'BSNAMYK1', 'PHBMMYKL', 
-                            'MFBBMYKL', 'ARBKMYKL', 'BKCHMYKL', 'RJHIMYKL', 'BKRMMYKL']
+        self.bank_codes = constants.SWIFT_codes
         
-        self.interest_related_products = ["money_market_operations", "interbank", "overall"]
-        self.exchange_rate_snapshots = ["0900" "1130" "1200" "1700"]
+        self.interest_related_products = constants.interest_related_products
+        self.exchange_rate_snapshots = constants.exchange_rate_snapshots
 
     """
     Helper function to send requests. Handles error codes and exceptions too.
@@ -203,9 +201,14 @@ class OpenBNMAPI:
         - By Currency and Month and Year
         """
         if currency_code:
-            # TO-DO further input validation for currency code as per ISO 4217
-            if not (len(currency_code) == 3): # Naive validation
-                raise ValueError("Invalid Currency Code. Please ensure currency is as per ISO 4217 format")
+            currency_code_error =   ("Invalid Currency Code.\n"
+                                    "Please ensure your currency is in ISO 4217 standard format.\n"
+                                    "Read more here: https://www.iso.org/iso-4217-currency-codes.html")
+            
+            if not (len(currency_code) == 3) or \
+                currency_code not in constants.currency_codes:
+                raise ValueError(currency_code_error)
+
             
             # Append Currency args first
             currency_args = "/{}".format(currency_code)

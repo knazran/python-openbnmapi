@@ -1,0 +1,8 @@
+# MacOS Cruft
+.DS_Store
+
+# Do not track the results of installing the module
+dist/
+build/
+openbnmapi.egg-info/
+
