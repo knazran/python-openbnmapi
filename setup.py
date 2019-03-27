@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='openbnmapi',
-      version='0.1',
+      version='0.3',
       description="The unofficial Python wrapper for Bank Negara Malaysia's Open API endpoints",
       long_description=readme(),
       url='https://github.com/knazran/python-openbnmapi',
