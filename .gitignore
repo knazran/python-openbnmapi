@@ -1,8 +1,10 @@
 # MacOS Cruft
 .DS_Store
+*.ipynb
+*.pyc
 
 # Do not track the results of installing the module
 dist/
 build/
 openbnmapi.egg-info/
-
+/openbnmapi/__pycache__/*

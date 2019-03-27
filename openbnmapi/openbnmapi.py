@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime, date
 
 # Local modules
-import constants
+from . import constants
 
 class OpenBNMAPI:
     
@@ -79,7 +79,7 @@ class OpenBNMAPI:
                     return_url = "/date/{}".format(date)
                     return return_url
                 else:
-                    yield ValueError('Year out of range. Please ensure year is more recent than 2000')
+                    raise ValueError('Year out of range. Please ensure year is more recent than 2000')
      
             except ValueError:
                 raise ValueError("Incorrect date format, should be YYYY-MM-DD")
