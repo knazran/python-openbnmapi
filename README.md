@@ -8,7 +8,7 @@ Using pip:
 pip install openbnmapi
 ```
 ### Example Usage
-```
+```python
 import openbnmapi
 
 obnmapi = OpenBNMAPI()
@@ -20,21 +20,21 @@ print(br)
 ### Currently supports the following endpoints:
 - Base Rates/BLR (https://api.bnm.gov.my/portal#tag/Base-RatesBLREffective-LR)
   - Latest Base Rate
-  ```
+  ```python
   # Get latest base_rate
   obnmapi = OpenBNMAPI()
   obnmapi.base_rate()
   ```
   - Latest Base_rate by bank code
     - 'bank_code' accepts 8 characters of SWIFT code
-  ```
+  ```python
   # Get latest base_rate by bank code
   obnmapi = OpenBNMAPI()
   obnmapi.base_rate(bank_code="BKKBMYKL")
   ```
 - Daily FX Turnover (https://api.bnm.gov.my/portal#tag/Daily-FX-Turnover)
   - Latest Daily FX Turnover
-  ```
+  ```python
   # Get latest Daily FX Turnover
   obnmapi = OpenBNMAPI()
   obnmapi.daily_fx_turnover()
