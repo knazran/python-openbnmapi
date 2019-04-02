@@ -41,6 +41,12 @@ print(br)
   ```
 - Exchange Rates
 - Financial Consumer Alert
+  - Latest List of Financial Consumer Alert
+   ```python
+  # Get latest Financial Consumer Alert
+  obnmapi = OpenBNMAPI()
+  obnmapi.consumer_alert()
+  ```
 - Interbank Swap
 - Interest Rate
 - Interest Volume
@@ -55,7 +61,7 @@ print(br)
 Implement 
 - Finish Documentation including input parameters and return values
 - More proper error handling
-- Input Validation on currency codes as per ISO 4217
+- Add Request Time Out handling
 - Cache mechanism 
 - Pandas dataframe support
 
